@@ -1,63 +1,32 @@
-Role Name
+extend-disk
 =========
 
-name: ansible-role-image-pull
-The purpose of this role is to pull all of the required runtime images from a connected environment. 
-After the images are pulled they are exported to a tar.gz file.
+name: ansible-role-extend-disk
+The purpose of this role is to extend the root file system by added a new partition from available space on the disk extended.
+This is mainly to help the libvirt automation.
 
 Requirements
 ------------
 
-Docker is installed
-Docker daemon is running
-All repo's are setup correctly 
-
-Roles are available to do the above if required.
+Disk thats already been extended at the hypervisor layer.
 
 Role Variables
 --------------
 
-Most variables required for this role to run are currently set in the defaults directory of the role and dont need to be set. 
-
-OpenShift Versioning variables. Default values set to the following already.
-     ocp_version: v3.11.146
-     image_inspector_version: 2.1
-     etcd_version : 3.2.22
-
-Do you want to pull images, sometimes you just want to run the role again to export tar file. Default value set to "yes"
-     ocp_images_pull_core: "yes"
-     ocp_images_pull_app: "yes"
-     ocp_images_pull_opt: "yes"
-
-If you require images to be saved to a tar file, do not change the default values below.
-     rhexport_core: "yes"
-     rhexport_apps: "yes"
-
-Path for exports
-     rh_ocp_export_path_core: /var/lib/docker/overlay2/export/core.tar
-     rh_ocp_export_path_app: /var/lib/docker/overlay2/export/app.tar
-
-
-## Required variables
-However you will need the following.
-
-Red Hat token credentials to access the registry. You need to create a token at access.redhat.com
-     rhreg_user: 
-     rhreg_pass: 
-     rhreg_name: "registry.redhat.io"
+Most variables required for this role to run are currently set in the defaults directory of the role and need to be overriden if not using vda and rhel vg.
 
 
 Example Playbook
 ----------------
 
-- name: OpenShift Disconnected Prep 
+- name: Extend disk 
   hosts: localhost  
   become: true
 
   tasks:
-    - name: "Include the image pull role"
+    - name: "Include the extend disk role"
       include_role:
-        name: ../roles/ansible-role-ocp-image-pull
+        name: ../roles/ansible-role-extend-disk
 
 
 License
