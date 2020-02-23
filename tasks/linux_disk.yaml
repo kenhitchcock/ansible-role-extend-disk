@@ -1,0 +1,40 @@
+---
+
+- name: "Check if partition already created"
+  stat:
+    path: "{{DISKTOCREATE}}"
+  register: part_created
+
+- name: Extend disks in VM
+  shell: |
+         printf "n\np\n3\n\n\nt\n3\n8e\nw\n" | fdisk "{{DISKTOUSE}}"
+         partprobe
+  ignore_errors: yes
+  when: part_created.stat.exists != true
+
+#  parted:
+#    device: /dev/vda
+#    part_type: primary
+#    number: 3
+#    flags: [ lvm ]
+#    state: present
+#    part_end: 100%
+
+- name: "Creates pvs and extends volume group"
+  lvg:
+    vg: "{{VGNAME}}"
+    pvs: "{{PVS}}"
+  when: part_created.stat.exists != true
+
+- name: "Extend the logical volume to consume all remaining space in the volume group"
+  lvol:
+    vg: "{{VGNAME}}"
+    lv: "{{LVNAME}}"
+    size: +100%FREE
+    resizefs: true
+  when: part_created.stat.exists != true
+
+
+
+
+

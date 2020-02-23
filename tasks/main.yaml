@@ -1,0 +1,8 @@
+---
+- block:
+    - name: "Extend Linux Disk"
+      include_tasks: linux_disk.yaml
+      tags: [extenddisk]
+
+  become: true
+

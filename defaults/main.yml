@@ -1,0 +1,9 @@
+---
+# defaults file for role 
+
+DISKTOCREATE: /dev/vda3
+DISKTOUSE: /dev/vda
+PVS: "/dev/vda2,/dev/vda3"
+VGNAME: rhel
+LVNAME: root
+
